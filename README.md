@@ -1,5 +1,15 @@
 # deskpi_v4
+## Description 
 DeskPi V4 
+## Features
+* Convert the `microHDMI` to a `Full-sized HDMI` interface and place it on the back of the panel with the power interface
+* Transfer `3.5mm audio` interface to the back of the panel
+* Support Raspberry Pi official `fan temperature control function` via `raspi-config` tool.
+* Support system shutdown to `safe cut off power` on Raspberry Pi 
+* Support adjustable fan speed via `PWM` programming.
+* Easy to install 
+* Light weight heat-sink inside.
+* Adjustable speed Fan
 ## Product Links: https://deskpi.com
 ## How to install it.
 ### For Raspbian and RetroPie OS.
