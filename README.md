@@ -1,6 +1,8 @@
 # deskpi_v4
 ## Description 
-DeskPi V4 
+The DeskPin V4 Case is a case made of ABS, and an adapter board is provided inside to transfer the HDMI interface, 3.5mm audio interface, and USB-C power interface of the Raspberry Pi to the back of the panel.
+and offer `microHDMI` to `Full-sized HDMI` interface, makes it convenient for users to use standard HDMI cables to connect external display devices. 
+In addition, it provides an ultra-thin aluminum alloy heat sink and supports an adjustable-speed ultra-thin silent fan, which can be safely cut off Power supply for Raspberry Pi  by sending a "power_off" signal to the adapter board.
 ## Features
 * Convert the `microHDMI` to a `Full-sized HDMI` interface and place it on the back of the panel with the power interface
 * Transfer `3.5mm audio` interface to the back of the panel
@@ -131,3 +133,9 @@ and also you can write your code to control the fan via `GPIO14`, sending `PWM` 
 dtoverlay=dwc2,dr_mode=host
 ```
 <pre>DO REMEMBER `reboot` Raspberry Pi to take effect.</pre>
+## How to send `power_off` signal to adapter board to cut off power?
+* Make sure you have already add `dtoverlay=dwc2,dr_mode=host` to `/boot/config.txt` file and `reboot` Raspberry Pi.
+* Check if there is a device called `/dev/ttyUSB0`
+* Execute the python demo script in `deskpi_v4/drivers/python/safecutoffpower.py` 
+* you may need to install `pyserial` library.
+* Recommend: adding this function after `shutdown` service, so that it can safely cut off the power of Raspberry Pi.  
