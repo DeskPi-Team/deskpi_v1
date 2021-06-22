@@ -1,0 +1,45 @@
+#!/bin/bash	
+# Uninstall script 
+. /lib/lsb/init-functions
+# Stop deskpi_v4-safecutoffpower.service.
+daemonname='deskpi_v4-safecutoffpower.service'
+sudo systemctl stop $daemonname
+sudo systemctl disable $daemonname
+
+# Define file locations
+installation_dir="/home/pi/deskpi_v4"
+# Greetings and information for user.
+log_action_msg "Welcome to Use DeskPi-Team's Product - DeskPi-V4"
+log_action_msg "Please select what distribution you have: "
+log_action_msg "1 - Raspbian"
+log_action_msg "2 - Manjaro"
+log_action_msg "3 - Ubuntu Mate"
+log_action_msg "4 - Kali"
+log_action_msg "5 - Cancel Uninstallation Process"
+log_action_msg "Just input the number and press enter."
+read -p "Your choice:" os_type
+case $os_type in
+	1) 
+	   log_action_msg "Uninstalling DeskPi V4 Utilitis"
+	   bash $installation_dir/uninstall.sh
+	   ;;
+	2) 
+	   log_action_msg "Uninstalling DeskPi Utilitis"
+	   bash $installation_dir/uninstall-manjaro.sh
+	   ;;
+	3) 
+	   log_action_msg "Uninstalling DeskPi Utilitis"
+	   bash $installation_dir/uninstall-ubuntu-mate.sh
+	   ;;
+	4) 
+	   log_action_msg "Uninstalling DeskPi Utilitis"
+	   bash $installation_dir/uninstall-kali.sh
+	   ;;
+	5) 
+	   log_action_msg "Uninstallation Canceled"
+	   ;;
+	*) 
+	   log_action_msg "Error selection please try again"
+	   . /usr/bin/Deskpi-uninstall
+	   ;;
+esac
