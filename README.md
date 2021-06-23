@@ -80,6 +80,7 @@ cd ~/deskpi_v4/
 ./install.sh
 ```
 ### For Volumio OS Version: 2021-04-24-Pi
+<pre>NOTE: Due to OS did not support gpio control so can not control fan via PWM signal, so the fan will be at 100% speed spinning.</pre> 
 * Image Download URL: https://updates.volumio.org/pi/volumio/2.882/volumio-2.882-2021-04-24-pi.img.zip
 * Getting Start:　https://volumio.github.io/docs/User_Manual/Quick_Start_Guide.html
 * Make sure your Volumio can access internet. 
