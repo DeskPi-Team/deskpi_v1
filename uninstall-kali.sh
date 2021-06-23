@@ -16,6 +16,4 @@ log_action_msg "Remove DeskPi V4 Driver files..."
 sudo rm -f  $safeshutdaemon 2&>/dev/null 
 sudo rm -f /usr/bin/safecutoffpower 2&>/dev/null
 sudo rm -f /usr/bin/Deskpi-uninstall 2&>/dev/null 
-log_success_msg "Uninstall DeskPi V4 Driver Repository." 
-sudo rm -f /home/kali/deskpi_v4
 log_success_msg "Uninstall DeskPi V4 Driver Successfully." 
