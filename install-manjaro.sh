@@ -1,53 +1,56 @@
 #!/bin/bash
 # 
-. /lib/lsb/init-functions
+echo "DeskPi V4 Driver Installing..."
+if [ -d /tmp/deskpi_v4 ]; then
+	sudo rm -rf /tmp/deskpi_v4 2&>/dev/null
+fi
+echo "Download the latest DeskPi V4 Driver from GitHub..."
+cd /tmp && git clone https://github.com/DeskPi-Team/deskpi_v4.git 
 
-daemonname="deskpi_v4-safecutoffpower.service"
-safecutoffpowerdaemonfile=/lib/systemd/system/$daemonname
-installationfolder=/home/$USER/deskpi_v4
+echo "DeskPi V4 Driver Installation Start."
+deskpiv4=/lib/systemd/system/systemd-deskpiv4-safecutoffpower.service
+driverfolder=/tmp/deskpi_v4
 
 # delete deskpi_v4-safecutoffpower.service file.
-if [ -e $safecutoffpowerdaemonfile ]; then
-	sudo sh -c "rm -f $safecutoffpowerdaemonfile"
+if [ -e $deskpiv4 ]; then
+	sudo sh -c "rm -f $deskpiv4"
 fi
 
 # adding dtoverlay to enable dwc2 on host mode.
-sudo sh -c "sed -i '/dtoverlay=dwc2*/d' /boot/config.txt"
-sudo sh -c "sed -i '$a\dtoverlay=dwc2,dr_mode=host' /boot/config.txt" 
+echo "Configure /boot/config.txt file and enable front USB2.0"
+sudo sed -i '/dtoverlay=dwc2*/d' /boot/config.txt
+sudo sed -i '$a\dtoverlay=dwc2,dr_mode=host' /boot/config.txt 
 sudo sh -c "echo dwc2 > /etc/modules-load.d/raspberry.conf" 
 
-log_action_msg "DeskPi V4 Driver installation Start..."
-cd $installationfolder/drivers/c/ 
-sudo sh -c "cp -rf $installationfolder/drivers/c/safecutoffpower /usr/bin/safecutoffpower"
-sudo sh -c "chmod 755 /usr/bin/safecutoffpower"
-sudo cp -rf $installationfolder/Deskpi-uninstall /usr/bin/Deskpi-uninstall
-sudo sh -c "chmod 755 /usr/bin/Deskpi-uninstall"
+sudo cp -rf $driverfolder/drivers/c/safecutoffpower /usr/bin/safecutoffpower
+sudo chmod 755 /usr/bin/safecutoffpower
+sudo cp -rf $driverfolder/Deskpi-uninstall /usr/bin/Deskpi-uninstall
+sudo chmod 755 /usr/bin/Deskpi-uninstall
 
 # send cut off power signal to MCU before system shuting down.
-echo "[Unit]" > $safecutoffpowerdaemonfile
-echo "Description=DeskPi V4  Safe Cut-off Power Service" >> $safecutoffpowerdaemonfile
-echo "Conflicts=reboot.target" >> $safecutoffpowerdaemonfile
-echo "Before=halt.target shutdown.target poweroff.target" >> $safecutoffpowerdaemonfile
-echo "DefaultDependencies=no" >> $safecutoffpowerdaemonfile
-echo "[Service]" >> $safecutoffpowerdaemonfile
-echo "Type=oneshot" >> $safecutoffpowerdaemonfile
-echo "ExecStart=/usr/bin/sudo /usr/bin/safecutoffpower" >> $safecutoffpowerdaemonfile
-echo "RemainAfterExit=yes" >> $safecutoffpowerdaemonfile
-echo "[Install]" >> $safecutoffpowerdaemonfile
-echo "WantedBy=halt.target shutdown.target poweroff.target" >> $safecutoffpowerdaemonfile
+sudo echo "[Unit]" > $deskpiv4
+sudo echo "Description=DeskPi V4 Safe Cut-off Power Service" >> $deskpiv4
+sudo echo "Conflicts=reboot.target" >> $deskpiv4
+sudo echo "Before=halt.target shutdown.target poweroff.target" >> $deskpiv4
+sudo echo "DefaultDependencies=no" >> $deskpiv4
+sudo echo "[Service]" >> $deskpiv4
+sudo echo "Type=oneshot" >> $deskpiv4
+sudo echo "ExecStart=/usr/bin/sudo /usr/bin/safecutoffpower" >> $deskpiv4
+sudo echo "RemainAfterExit=yes" >> $deskpiv4
+sudo echo "[Install]" >> $deskpiv4
+sudo echo "WantedBy=halt.target shutdown.target poweroff.target" >> $deskpiv4
 
-log_action_msg "DeskPi V4 Service configuration finished." 
-sudo chown root:root $safecutoffpowerdaemonfile
-sudo chmod 755 $safecutoffpowerdaemonfile
+sudo chown root:root $deskpiv4
+sudo chmod 755 $deskpiv4
 
-log_action_msg "DeskPi V4 Service Load module." 
-sudo systemctl daemon-reload
-sudo systemctl enable $daemonname
+systemctl daemon-reload
+systemctl enable systemd-deskpiv4-safecutoffpower.service
+# install rpi.gpio for fan control
+# yes |sudo pacman -S python-pip
+# sudo pacman -S python python-pip base-devel
+# env CFLAGS="-fcommon" pip install rpi.gpio
 
-# Finished 
-log_success_msg "DeskPi V4 Driver installed successfully." 
-# greetings and require rebooting system to take effect.
-log_action_msg "System will reboot in 5 seconds to take effect." 
-sudo sync
-sleep 5 
-sudo reboot
+sync
+sudo rm -rf /tmp/deskpi_v4
+echo "DeskPi V4 Driver installation successful, system will reboot in 5 seconds to take effect!"
+sleep 5 && sudo reboot
