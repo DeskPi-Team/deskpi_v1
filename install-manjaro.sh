@@ -22,10 +22,8 @@ sudo sed -i '/dtoverlay=dwc2*/d' /boot/config.txt
 sudo sed -i '$a\dtoverlay=dwc2,dr_mode=host' /boot/config.txt 
 sudo sh -c "echo dwc2 > /etc/modules-load.d/raspberry.conf" 
 
-sudo cp -rf $driverfolder/drivers/c/safecutoffpower /usr/bin/safecutoffpower
-sudo chmod 755 /usr/bin/safecutoffpower
-sudo cp -rf $driverfolder/Deskpi-uninstall /usr/bin/Deskpi-uninstall
-sudo chmod 755 /usr/bin/Deskpi-uninstall
+sudo cp -rf $driverfolder/drivers/c/safecutoffpower64 /usr/bin/safecutoffpower64
+sudo chmod 755 /usr/bin/safecutoffpower64
 
 # send cut off power signal to MCU before system shuting down.
 sudo echo "[Unit]" > $deskpiv4
@@ -35,13 +33,13 @@ sudo echo "Before=halt.target shutdown.target poweroff.target" >> $deskpiv4
 sudo echo "DefaultDependencies=no" >> $deskpiv4
 sudo echo "[Service]" >> $deskpiv4
 sudo echo "Type=oneshot" >> $deskpiv4
-sudo echo "ExecStart=/usr/bin/sudo /usr/bin/safecutoffpower" >> $deskpiv4
+sudo echo "ExecStart=/usr/bin/sudo /usr/bin/safecutoffpower64" >> $deskpiv4
 sudo echo "RemainAfterExit=yes" >> $deskpiv4
 sudo echo "[Install]" >> $deskpiv4
 sudo echo "WantedBy=halt.target shutdown.target poweroff.target" >> $deskpiv4
 
 sudo chown root:root $deskpiv4
-sudo chmod 755 $deskpiv4
+sudo chmod 644 $deskpiv4
 
 systemctl daemon-reload
 systemctl enable systemd-deskpiv4-safecutoffpower.service
