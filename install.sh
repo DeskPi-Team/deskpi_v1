@@ -2,11 +2,6 @@
 # 
 . /lib/lsb/init-functions
 sudo apt-get update && sudo apt-get -y install git 
-if [ $? -eq 0 ]; then 
-	log_action_msg "Download DeskPi V4 Driver from Github"
-	cd ~
-	sh -c "git clone https://github.com/DeskPi-Team/deskpi_v4.git"
-fi
 
 cd $HOME/deskpi_v4/
 daemonname="deskpi_v4"
@@ -14,8 +9,8 @@ safecutoffpower=/lib/systemd/system/$daemonname-safecutoffpower.service
 installationfolder=$HOME/$daemonname
 
 # Create service file on system.
-if [ -e $deskpidaemon ]; then
-	sudo rm -f $deskpidaemon
+if [ -e $safecutoffpower ]; then
+	sudo rm -f $safecutoffpower
 fi
 
 # adding dtoverlay to enable dwc2 on host mode.

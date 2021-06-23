@@ -16,6 +16,6 @@ log_action_msg "Remove DeskPi V4 Driver..."
 sudo rm -f  $filelocation  2&>/dev/null 
 sudo rm -f /usr/bin/safecutofpower 2&>/dev/null 
 sudo rm -f /usr/bin/Deskpi-uninstall 2&>/dev/null 
-log_action_msg "Remove DeskPi V4 Driver Repository..."
-sudo rm -f /home/pi/deskpi_v4
 log_success_msg "Uninstall DeskPi V4 Driver Successfully." 
+log_success_msg "Now You can remove DeskPi V4 Driver folder..." 
+
