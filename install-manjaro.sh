@@ -23,28 +23,34 @@ sudo sed -i '$a\dtoverlay=dwc2,dr_mode=host' /boot/config.txt
 sudo sh -c "echo dwc2 > /etc/modules-load.d/raspberry.conf" 
 
 sudo cp -rf $driverfolder/drivers/c/safecutoffpower64 /usr/bin/safecutoffpower64
-sudo chmod 755 /usr/bin/safecutoffpower64
+sudo cp -rf $driverfolder/drivers/python/safecutoffpower.py /usr/bin/safecutoffpower.py
+sudo chmod 644 /usr/bin/safecutoffpower64
+sudo chmod 644 /usr/bin/safecutoffpower.py
 
 # send cut off power signal to MCU before system shuting down.
 sudo echo "[Unit]" > $deskpiv4
 sudo echo "Description=DeskPi V4 Safe Cut-off Power Service" >> $deskpiv4
 sudo echo "Conflicts=reboot.target" >> $deskpiv4
-sudo echo "Before=halt.target shutdown.target poweroff.target" >> $deskpiv4
 sudo echo "DefaultDependencies=no" >> $deskpiv4
+sudo echo "" >> $deskpiv4
 sudo echo "[Service]" >> $deskpiv4
 sudo echo "Type=oneshot" >> $deskpiv4
 sudo echo "ExecStart=/usr/bin/sudo /usr/bin/safecutoffpower64" >> $deskpiv4
+sudo echo "# ExecStart=/usr/bin/sudo python3 /usr/bin/safecutoffpower.py" >> $deskpiv4
 sudo echo "RemainAfterExit=yes" >> $deskpiv4
+sudo echo "TimeoutStartSec=15" >> $deskpiv4
+sudo echo "" >> $deskpiv4
 sudo echo "[Install]" >> $deskpiv4
-sudo echo "WantedBy=halt.target shutdown.target poweroff.target" >> $deskpiv4
+sudo echo "WantedBy=halt.target shutdown.target poweroff.target final.target" >> $deskpiv4
 
 sudo chown root:root $deskpiv4
 sudo chmod 644 $deskpiv4
 
-systemctl daemon-reload
-systemctl enable systemd-deskpiv4-safecutoffpower.service
+sudo systemctl daemon-reload
+sudo systemctl enable systemd-deskpiv4-safecutoffpower.service
 # install rpi.gpio for fan control
-# yes |sudo pacman -S python-pip
+yes |sudo pacman -S python-pip
+sudo pip3 install pyserial
 # sudo pacman -S python python-pip base-devel
 # env CFLAGS="-fcommon" pip install rpi.gpio
 
