@@ -5,12 +5,15 @@
 ## How to install deskpi fan control driver when i've reflashed my TF card? 
 * Make sure your OS is on the support OS list.
 * Make sure your Raspberry Pi can access internet.
-* git clone https://github.com/DeskPi-Team/deskpi_v4.git
+```
+git clone https://github.com/DeskPi-Team/deskpi_v1.git
+```
+
 * Typing following command in a terminal:
 ```bash
-cd ~/deskpi_v4/
+cd ~/deskpi_v1/
 chmod +x install.sh
 sudo ./install.sh
 ```
 ## Where is the list of supported OS ?
-* Please just visit here: https://github.com/DeskPi-Team/deskpi_v4
+* Please just visit here: https://github.com/DeskPi-Team/deskpi_v1
