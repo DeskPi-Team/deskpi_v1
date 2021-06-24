@@ -19,22 +19,38 @@ sudo sed -i '$a\dtoverlay=dwc2,dr_mode=host' /boot/firmware/config.txt
 # install PWM fan control daemon.
 log_action_msg "DeskPi V1 Driver installation Start..."
 cd $installationfolder/drivers/c/ 
-sudo cp -rf $installationfolder/drivers/c/safecutoffpower /usr/bin/safecutoffpower
-sudo chmod 755 /usr/bin/safecutoffpower
+if [ `uname -i` == 'aarch64' ]; then
+	sudo cp -rf $installationfolder/drivers/c/safecutoffpower64 /usr/bin/safecutoffpower64
+	sudo chmod 755 /usr/bin/safecutoffpower64
+	# send cut off power signal to MCU before system shuting down.
+	echo "[Unit]" > $safecutoffpower
+	echo "Description=DeskPi V1 Safe Cut-off Power Service" >> $safecutoffpower
+	echo "Conflicts=reboot.target" >> $safecutoffpower
+	echo "Before=halt.target shutdown.target poweroff.target" >> $safecutoffpower
+	echo "DefaultDependencies=no" >> $safecutoffpower
+	echo "[Service]" >> $safecutoffpower
+	echo "Type=oneshot" >> $safecutoffpower
+	echo "ExecStart=/usr/bin/sudo /usr/bin/safecutoffpower64" >> $safecutoffpower
+	echo "RemainAfterExit=yes" >> $safecutoffpower
+	echo "[Install]" >> $safecutoffpower
+	echo "WantedBy=halt.target shutdown.target poweroff.target" >> $safecutoffpower
+else
+	sudo cp -rf $installationfolder/drivers/c/safecutoffpower /usr/bin/safecutoffpower
+	sudo chmod 755 /usr/bin/safecutoffpower
+	# send cut off power signal to MCU before system shuting down.
+	echo "[Unit]" > $safecutoffpower
+	echo "Description=DeskPi V1 Safe Cut-off Power Service" >> $safecutoffpower
+	echo "Conflicts=reboot.target" >> $safecutoffpower
+	echo "Before=halt.target shutdown.target poweroff.target" >> $safecutoffpower
+	echo "DefaultDependencies=no" >> $safecutoffpower
+	echo "[Service]" >> $safecutoffpower
+	echo "Type=oneshot" >> $safecutoffpower
+	echo "ExecStart=/usr/bin/sudo /usr/bin/safecutoffpower" >> $safecutoffpower
+	echo "RemainAfterExit=yes" >> $safecutoffpower
+	echo "[Install]" >> $safecutoffpower
+	echo "WantedBy=halt.target shutdown.target poweroff.target" >> $safecutoffpower
+fi
  
-# send cut off power signal to MCU before system shuting down.
-echo "[Unit]" > $safecutoffpower
-echo "Description=DeskPi V1 Safe Cut-off Power Service" >> $safecutoffpower
-echo "Conflicts=reboot.target" >> $safecutoffpower
-echo "Before=halt.target shutdown.target poweroff.target" >> $safecutoffpower
-echo "DefaultDependencies=no" >> $safecutoffpower
-echo "[Service]" >> $safecutoffpower
-echo "Type=oneshot" >> $safecutoffpower
-echo "ExecStart=/usr/bin/sudo /usr/bin/fanStop" >> $safecutoffpower
-echo "RemainAfterExit=yes" >> $safecutoffpower
-echo "[Install]" >> $safecutoffpower
-echo "WantedBy=halt.target shutdown.target poweroff.target" >> $safecutoffpower
-
 log_action_msg "DeskPi V1 Service configuration finished." 
 sudo chown root:root $safecutoffpower
 sudo chmod 755 $safecutoffpower
