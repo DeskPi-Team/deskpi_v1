@@ -2,9 +2,9 @@
 # 
 . /lib/lsb/init-functions
 
-daemonname="deskpi_v4-safecutoffpower.service"
+daemonname="deskpi_v1-safecutoffpower.service"
 filelocation=/lib/systemd/system/$daemonname
-installationfolder=/home/kali/deskpi_v4
+installationfolder=/home/kali/deskpi_v1
 
 if [ -e $filelocation ]; then
 	sudo rm -f $filelocation
@@ -14,13 +14,11 @@ fi
 sudo sed -i '/dtoverlay=dwc2*/d' /boot/config.txt 
 sudo sed -i '$a\dtoverlay=dwc2,dr_mode=host' /boot/config.txt 
 
-log_action_msg "DeskPi v4 main control service loaded."
+log_action_msg "DeskPi v1 main control service loaded."
 cd $installationfolder/drivers/c/ 
 sudo cp -rf $installationfolder/drivers/c/safecutoffpower /usr/bin/safecutoffpower
-sudo cp -rf $installationfolder/Deskpi-uninstall /usr/bin/Deskpi-uninstall
 sudo chmod 755 /usr/bin/safecutoffpower
-sudo chmod 755 /usr/bin/Deskpi-uninstall
-
+ 
 # send cut off power  signal to MCU before system shuting down
 echo "[Unit]" > $filelocation
 echo "Description=DeskPi Safeshutdown Service" >> $filelocation
@@ -34,16 +32,16 @@ echo "RemainAfterExit=yes" >> $filelocation
 echo "[Install]" >> $filelocation
 echo "WantedBy=halt.target shutdown.target poweroff.target" >> $filelocation
 
-log_action_msg "DeskPi V4 Service configuration finished." 
+log_action_msg "DeskPi V1 Service configuration finished." 
 sudo chown root:root $filelocation
 sudo chmod 755 $filelocation
 
-log_action_msg "DeskPi V4 Service Load module." 
+log_action_msg "DeskPi V1 Service Load module." 
 sudo systemctl daemon-reload
 sudo systemctl enable $daemonname
 
 # Finished 
-log_success_msg "DeskPi V4 Driver installed successfully." 
+log_success_msg "DeskPi V1 Driver installed successfully." 
 # greetings and require rebooting system to take effect.
 log_action_msg "System will reboot in 5 seconds to take effect." 
 sudo sync
