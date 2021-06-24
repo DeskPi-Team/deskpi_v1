@@ -13,72 +13,84 @@ In addition, it provides an ultra-thin aluminum alloy heat sink and supports an 
 * Light weight heat-sink inside.
 * Adjustable speed Fan
 ## Product Links: https://deskpi.com
+
 ## How to install it.
-### For Raspbian and RetroPie OS.
-```bash
+
+### For Raspbian and RetroPie OS
+```
 cd ~
 git clone https://github.com/DeskPi-Team/deskpi_v1.git
 cd ~/deskpi_v1/
 chmod +x install.sh
 sudo ./install.sh
 ```
+
 ### For Ubuntu-mate OS
-```bash
+```
 cd ~
 git clone https://github.com/DeskPi-Team/deskpi_v1.git
 cd ~/deskpi_v1/
 chmod +x install-ubuntu-mate.sh
 sudo ./install-ubuntu-mate.sh
 ```
+
 ### For Manjaro OS
-```bash
+* Manjaro OS `can not` support control Fan speed via GPIO due to OS can not support `rpi.gpio` well.
+```
 cd ~
 git clone https://github.com/DeskPi-Team/deskpi_v1.git
 cd ~/deskpi_v1/
 chmod +x install-manjaro.sh
 sudo ./install-manjaro.sh
 ```
+
 ### For Kali-linux-arm OS.
-* Image Download URL: https://images.kali.org/arm-images/kali-linux-2020.3a-rpi3-nexmon.img.xz <br>
-```bash
+* Image Download URL: `https://images.kali.org/arm-images/kali-linux-2020.3a-rpi3-nexmon.img.xz`
+
+```
 cd ~
 git clone https://github.com/DeskPi-Team/deskpi_v1.git
 cd ~/deskpi_v1/
 chmod +x install-kali.sh
 sudo ./install-kali.sh
 ```
+
 ### For Twister OS v2.0.2
-`OS image: TwisterOSv2-0-2.img`
+* OS image: `TwisterOSv2-0-2.img`
 * Image Download URL:https://twisteros.com/twisteros.html <br>
-```bash
+```
 cd ~
 git clone https://github.com/DeskPi-Team/deskpi_v1.git
 cd ~/deskpi_v1/
 chmod +x install.sh
 sudo ./install.sh
 ```
+
 ### For 64 bit Raspberry Pi OS (aarm64)
 * Image Download URL: http://downloads.raspberrypi.org/raspios_arm64/images/raspios_arm64-2021-05-28/
-```bash
+```
 cd ~
 git clone https://github.com/DeskPi-Team/deskpi_v1.git
 cd ~/deskpi_v1/
 chmod +x install.sh
 sudo ./install.sh
 ```
+
 ### For DietPi OS 64bit 
 * Make sure your OS can access internet and please install `git` first.
 * Execute this command in terminal:
 ```
-apt-get update && apt-get -y install git 
+apt-get update && apt-get -y install git python3-pip python3-rpi.gpio
+pip3 install pyserial
 ```
 * Image Download URL:  https://dietpi.com/downloads/images/DietPi_RPi-ARMv8-Buster.7z
-```bash
+```
 cd ~
 git clone https://github.com/DeskPi-Team/deskpi_v1.git
 cd ~/deskpi_v1/
 ./install.sh
 ```
+
 ### For Volumio OS Version: 2021-04-24-Pi
 <pre>NOTE: Due to OS did not support gpio control so can not control fan via PWM signal, so the fan will be at 100% speed spinning.</pre> 
 * Image Download URL: https://updates.volumio.org/pi/volumio/2.882/volumio-2.882-2021-04-24-pi.img.zip
@@ -110,30 +122,45 @@ git clone https://github.com/DeskPi-Team/deskpi_v1.git
 cd deskpi_v1/
 sudo ./install.sh
 ```
+
 ## How to Uninstall deskpi
-```bash
-DeskPi-uninstall 
+* Common Uninstall method:
+```
+sudo uninstall.sh
+```
+
+* Specify OS type and execute uninstall script.
+<pre>for example: on unbuntu mate</pre>
+
+```
+sudo uninstall-ubuntu.sh
 ```
 And then select the number against to your OS Type. if your OS does `not` in the list, just select `raspberry pi os`instead. 
+
 ### For Windows IoT OS
 * Unsupported due to lacking of driver.
 * Testing version: Midnight falcon
+
 ## How to enable fan temperature control? 
 <pre> NOTE: Raspberry Pi OS (Latest) will support this function.</pre>
 * Open a terminal and typing following command:
 ```
 sudo raspi-config 
 ```
+
 Navigate to `Performance Options` -> `P4 Fan` -> `Yes` -> `14` -> `60` -> `yes` -> `finish` -> reboot Raspberry Pi.
 The fan is support `PWM` signal control via `GPIO14` which is `physical pin 12`(TXD), it will spinning when the CPU temperature is above `60` degree.
 and also you can write your code to control the fan via `GPIO14`, sending `PWM` signal will trigger the fan spinning.
+
 ## How to enable the USB2.0 in front of panel?
 * 1. Install DeskPi v1 driver.
 * 2. Add following parameter to /boot/config.txt file manually.
 ```
 dtoverlay=dwc2,dr_mode=host
 ```
+
 <pre>DO REMEMBER `reboot` Raspberry Pi to take effect.</pre>
+
 ## How to send `power_off` signal to adapter board to cut off power?
 * Make sure you have already add `dtoverlay=dwc2,dr_mode=host` to `/boot/config.txt` file and `reboot` Raspberry Pi.
 * Check if there is a device called `/dev/ttyUSB0`

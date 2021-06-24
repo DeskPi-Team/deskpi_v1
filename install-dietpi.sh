@@ -1,7 +1,12 @@
 #!/bin/bash
-# 
+# installation script for deskpi v1 on dietpi OS.
+
 . /lib/lsb/init-functions
-sudo apt-get update && sudo apt-get -y install git 
+
+log_action_msg "Install dependency packages"
+sudo apt-get update && sudo apt-get -y install git python3-pip python3-rpi.gpio 
+pip3 install pyserial
+
 
 cd $HOME/deskpi_v1/
 daemonname="deskpi_v1"
