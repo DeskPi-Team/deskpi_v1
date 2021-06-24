@@ -1,19 +1,19 @@
 #!/bin/bash
 # 
-echo "DeskPi V4 Driver Installing..."
-if [ -d /tmp/deskpi_v4 ]; then
-	sudo rm -rf /tmp/deskpi_v4 2&>/dev/null
+echo "DeskPi V1 Driver Installing..."
+if [ -d /tmp/deskpi_v1 ]; then
+	sudo rm -rf /tmp/deskpi_v1 2&>/dev/null
 fi
-echo "Download the latest DeskPi V4 Driver from GitHub..."
-cd /tmp && git clone https://github.com/DeskPi-Team/deskpi_v4.git 
+echo "Download the latest DeskPi V1 Driver from GitHub..."
+cd /tmp && git clone https://github.com/DeskPi-Team/deskpi_v1.git 
 
-echo "DeskPi V4 Driver Installation Start."
-deskpiv4=/lib/systemd/system/systemd-deskpiv4-safecutoffpower.service
-driverfolder=/tmp/deskpi_v4
+echo "DeskPi V1 Driver Installation Start."
+deskpiv1=/lib/systemd/system/systemd-deskpiv1-safecutoffpower.service
+driverfolder=/tmp/deskpi_v1
 
-# delete deskpi_v4-safecutoffpower.service file.
-if [ -e $deskpiv4 ]; then
-	sudo sh -c "rm -f $deskpiv4"
+# delete deskpi_v1-safecutoffpower.service file.
+if [ -e $deskpiv1 ]; then
+	sudo sh -c "rm -f $deskpiv1"
 fi
 
 # adding dtoverlay to enable dwc2 on host mode.
@@ -28,26 +28,26 @@ sudo chmod 644 /usr/bin/safecutoffpower64
 sudo chmod 644 /usr/bin/safecutoffpower.py
 
 # send cut off power signal to MCU before system shuting down.
-sudo echo "[Unit]" > $deskpiv4
-sudo echo "Description=DeskPi V4 Safe Cut-off Power Service" >> $deskpiv4
-sudo echo "Conflicts=reboot.target" >> $deskpiv4
-sudo echo "DefaultDependencies=no" >> $deskpiv4
-sudo echo "" >> $deskpiv4
-sudo echo "[Service]" >> $deskpiv4
-sudo echo "Type=oneshot" >> $deskpiv4
-sudo echo "ExecStart=/usr/bin/sudo /usr/bin/safecutoffpower64" >> $deskpiv4
-sudo echo "# ExecStart=/usr/bin/sudo python3 /usr/bin/safecutoffpower.py" >> $deskpiv4
-sudo echo "RemainAfterExit=yes" >> $deskpiv4
-sudo echo "TimeoutStartSec=15" >> $deskpiv4
-sudo echo "" >> $deskpiv4
-sudo echo "[Install]" >> $deskpiv4
-sudo echo "WantedBy=halt.target shutdown.target poweroff.target final.target" >> $deskpiv4
+sudo echo "[Unit]" > $deskpiv1
+sudo echo "Description=DeskPi V1 Safe Cut-off Power Service" >> $deskpiv1
+sudo echo "Conflicts=reboot.target" >> $deskpiv1
+sudo echo "DefaultDependencies=no" >> $deskpiv1
+sudo echo "" >> $deskpiv1
+sudo echo "[Service]" >> $deskpiv1
+sudo echo "Type=oneshot" >> $deskpiv1
+sudo echo "ExecStart=/usr/bin/sudo /usr/bin/safecutoffpower64" >> $deskpiv1
+sudo echo "# ExecStart=/usr/bin/sudo python3 /usr/bin/safecutoffpower.py" >> $deskpiv1
+sudo echo "RemainAfterExit=yes" >> $deskpiv1
+sudo echo "TimeoutStartSec=15" >> $deskpiv1
+sudo echo "" >> $deskpiv1
+sudo echo "[Install]" >> $deskpiv1
+sudo echo "WantedBy=halt.target shutdown.target poweroff.target final.target" >> $deskpiv1
 
-sudo chown root:root $deskpiv4
-sudo chmod 644 $deskpiv4
+sudo chown root:root $deskpiv1
+sudo chmod 644 $deskpiv1
 
 sudo systemctl daemon-reload
-sudo systemctl enable systemd-deskpiv4-safecutoffpower.service
+sudo systemctl enable systemd-deskpiv1-safecutoffpower.service
 # install rpi.gpio for fan control
 yes |sudo pacman -S python-pip
 sudo pip3 install pyserial
@@ -55,6 +55,6 @@ sudo pip3 install pyserial
 # env CFLAGS="-fcommon" pip install rpi.gpio
 
 sync
-sudo rm -rf /tmp/deskpi_v4
-echo "DeskPi V4 Driver installation successful, system will reboot in 5 seconds to take effect!"
+sudo rm -rf /tmp/deskpi_v1
+echo "DeskPi V1 Driver installation successful, system will reboot in 5 seconds to take effect!"
 sleep 5 && sudo reboot
