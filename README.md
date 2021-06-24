@@ -1,6 +1,6 @@
-# deskpi_v4
+# deskpi_v1
 ## Description 
-The DeskPin V4 Case is a case made of ABS, and an adapter board is provided inside to transfer the HDMI interface, 3.5mm audio interface, and USB-C power interface of the Raspberry Pi to the back of the panel.
+The DeskPin V1 Case is a case made of ABS, and an adapter board is provided inside to transfer the HDMI interface, 3.5mm audio interface, and USB-C power interface of the Raspberry Pi to the back of the panel.
 and offer `microHDMI` to `Full-sized HDMI` interface, makes it convenient for users to use standard HDMI cables to connect external display devices. 
 In addition, it provides an ultra-thin aluminum alloy heat sink and supports an adjustable-speed ultra-thin silent fan, which can be safely cut off Power supply for Raspberry Pi  by sending a "power_off" signal to the adapter board.
 ## Features
@@ -17,24 +17,24 @@ In addition, it provides an ultra-thin aluminum alloy heat sink and supports an 
 ### For Raspbian and RetroPie OS.
 ```bash
 cd ~
-git clone https://github.com/DeskPi-Team/deskpi_v4.git
-cd ~/deskpi_v4/
+git clone https://github.com/DeskPi-Team/deskpi_v1.git
+cd ~/deskpi_v1/
 chmod +x install.sh
 sudo ./install.sh
 ```
 ### For Ubuntu-mate OS
 ```bash
 cd ~
-git clone https://github.com/DeskPi-Team/deskpi_v4.git
-cd ~/deskpi_v4/
+git clone https://github.com/DeskPi-Team/deskpi_v1.git
+cd ~/deskpi_v1/
 chmod +x install-ubuntu-mate.sh
 sudo ./install-ubuntu-mate.sh
 ```
 ### For Manjaro OS
 ```bash
 cd ~
-git clone https://github.com/DeskPi-Team/deskpi_v4.git
-cd ~/deskpi_v4/
+git clone https://github.com/DeskPi-Team/deskpi_v1.git
+cd ~/deskpi_v1/
 chmod +x install-manjaro.sh
 sudo ./install-manjaro.sh
 ```
@@ -42,8 +42,8 @@ sudo ./install-manjaro.sh
 * Image Download URL: https://images.kali.org/arm-images/kali-linux-2020.3a-rpi3-nexmon.img.xz <br>
 ```bash
 cd ~
-git clone https://github.com/DeskPi-Team/deskpi_v4.git
-cd ~/deskpi_v4/
+git clone https://github.com/DeskPi-Team/deskpi_v1.git
+cd ~/deskpi_v1/
 chmod +x install-kali.sh
 sudo ./install-kali.sh
 ```
@@ -52,8 +52,8 @@ sudo ./install-kali.sh
 * Image Download URL:https://twisteros.com/twisteros.html <br>
 ```bash
 cd ~
-git clone https://github.com/DeskPi-Team/deskpi_v4.git
-cd ~/deskpi_v4/
+git clone https://github.com/DeskPi-Team/deskpi_v1.git
+cd ~/deskpi_v1/
 chmod +x install.sh
 sudo ./install.sh
 ```
@@ -61,8 +61,8 @@ sudo ./install.sh
 * Image Download URL: http://downloads.raspberrypi.org/raspios_arm64/images/raspios_arm64-2021-05-28/
 ```bash
 cd ~
-git clone https://github.com/DeskPi-Team/deskpi_v4.git
-cd ~/deskpi_v4/
+git clone https://github.com/DeskPi-Team/deskpi_v1.git
+cd ~/deskpi_v1/
 chmod +x install.sh
 sudo ./install.sh
 ```
@@ -75,8 +75,8 @@ apt-get update && apt-get -y install git
 * Image Download URL:  https://dietpi.com/downloads/images/DietPi_RPi-ARMv8-Buster.7z
 ```bash
 cd ~
-git clone https://github.com/DeskPi-Team/deskpi_v4.git
-cd ~/deskpi_v4/
+git clone https://github.com/DeskPi-Team/deskpi_v1.git
+cd ~/deskpi_v1/
 ./install.sh
 ```
 ### For Volumio OS Version: 2021-04-24-Pi
@@ -106,8 +106,8 @@ sudo reboot
 ```
 * Download DeskPi driver from github:
 ```
-git clone https://github.com/DeskPi-Team/deskpi_v4.git
-cd deskpi_v4/
+git clone https://github.com/DeskPi-Team/deskpi_v1.git
+cd deskpi_v1/
 sudo ./install.sh
 ```
 ## How to Uninstall deskpi
@@ -128,7 +128,7 @@ Navigate to `Performance Options` -> `P4 Fan` -> `Yes` -> `14` -> `60` -> `yes` 
 The fan is support `PWM` signal control via `GPIO14` which is `physical pin 12`(TXD), it will spinning when the CPU temperature is above `60` degree.
 and also you can write your code to control the fan via `GPIO14`, sending `PWM` signal will trigger the fan spinning.
 ## How to enable the USB2.0 in front of panel?
-* 1. Install DeskPi v4 driver.
+* 1. Install DeskPi v1 driver.
 * 2. Add following parameter to /boot/config.txt file manually.
 ```
 dtoverlay=dwc2,dr_mode=host
@@ -137,6 +137,6 @@ dtoverlay=dwc2,dr_mode=host
 ## How to send `power_off` signal to adapter board to cut off power?
 * Make sure you have already add `dtoverlay=dwc2,dr_mode=host` to `/boot/config.txt` file and `reboot` Raspberry Pi.
 * Check if there is a device called `/dev/ttyUSB0`
-* Execute the python demo script in `deskpi_v4/drivers/python/safecutoffpower.py` 
+* Execute the python demo script in `deskpi_v1/drivers/python/safecutoffpower.py` 
 * you may need to install `pyserial` library.
 * Recommend: adding this function after `shutdown` service, so that it can safely cut off the power of Raspberry Pi.  
