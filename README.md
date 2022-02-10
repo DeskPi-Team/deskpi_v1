@@ -1,4 +1,4 @@
-# deskpi_v1
+# deskpi_v1 - DeskPi Lite
 ## Description 
 The DeskPin V1 Case is a case made of ABS, and an adapter board is provided inside to transfer the HDMI interface, 3.5mm audio interface, and USB-C power interface of the Raspberry Pi to the back of the panel.
 and offer `microHDMI` to `Full-sized HDMI` interface, makes it convenient for users to use standard HDMI cables to connect external display devices. 
