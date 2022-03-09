@@ -3,14 +3,19 @@
 . /lib/lsb/init-functions
 sudo apt-get update && sudo apt-get -y install git 
 
-cd $HOME/deskpi_v1/
-daemonname="deskpi_v1"
-safecutoffpower=/lib/systemd/system/$daemonname-safecutoffpower.service
-installationfolder=$HOME/$daemonname
+TEMP=/tmp
 
-# Create service file on system.
-if [ -e $safecutoffpower ]; then
-	sudo rm -f $safecutoffpower
+cd $TEMP/ && git clone https://github.com/DeskPi-Team/deskpi_v1 
+if [[ !$ -neq 0 ]]; then
+	echo "Error: Can not download deskpi_v1 repository, please try again!"
+fi
+
+deskpi_daemon=deskpilite
+deskpi_lite_svc=/lib/systemd/system/$deskpi_daemon.service
+
+# remove old service file
+if [ -e $deskpi_lite_svc ]; then
+	sudo rm -f $deskpi_lite_svc
 fi
 
 # adding dtoverlay to enable dwc2 on host mode.
@@ -22,35 +27,37 @@ if [ $? -eq 0 ]; then
 fi
 
 # install safe cut off power daemon.
-log_action_msg "DeskPi v1 safe-cut-off-power after system halt daemon"
-cd $installationfolder/drivers/c/ 
-sudo cp -rf $installationfolder/drivers/c/safecutoffpower /usr/bin/safecutoffpower
-sudo chmod 755 /usr/bin/safecutoffpower
+log_action_msg "DeskPi lite safe shutdown service"
+
+# copy python script to /usr/bin/
+cp -f /tmp/deskpi_v1/drivers/python/safe_shutdown.py /usr/bin/
+cp -f /tmp/deskpi_v1/drivers/python/fan_control.py /usr/bin/
+cp -f /tmp/deskpi_v1/drivers/python/safecutoffpower.py /usr/bin/
 
 # send signal to MCU before system shuting down.
-echo "[Unit]" > $safecutoffpower
-echo "Description=DeskPi v1 Safe Cut-off Power Service" >> $safecutoffpower
-echo "Conflicts=reboot.target" >> $safecutoffpower
-echo "Before=halt.target shutdown.target poweroff.target" >> $safecutoffpower
-echo "DefaultDependencies=no" >> $safecutoffpower
-echo "[Service]" >> $safecutoffpower
-echo "Type=oneshot" >> $safecutoffpower
-echo "ExecStart=/usr/bin/sudo /usr/bin/safecutoffpower" >> $safecutoffpower
-echo "RemainAfterExit=yes" >> $safecutoffpower
-echo "TimeoutSec=1" >> $safecutoffpower
-echo "[Install]" >> $safecutoffpower
-echo "WantedBy=halt.target shutdown.target poweroff.target" >> $safecutoffpower
+echo "[Unit]" > $deskpi_lite_svc
+echo "Description=DeskPi Lite Service" >> $deskpi_lite_svc
+echo "Conflicts=reboot.target" >> $deskpi_lite_svc
+echo "Before=halt.target shutdown.target poweroff.target" >> $deskpi_lite_svc
+echo "DefaultDependencies=no" >> $deskpi_lite_svc
+echo "[Service]" >> $deskpi_lite_svc
+echo "Type=oneshot" >> $deskpi_lite_svc
+echo "ExecStart=/usr/bin/python3 /usr/bin/safeshutdown.py" >> $deskpi_lite_svc
+echo "RemainAfterExit=yes" >> $deskpi_lite_svc
+echo "TimeoutSec=1" >> $deskpi_lite_svc
+echo "[Install]" >> $deskpi_lite_svc
+echo "WantedBy=halt.target shutdown.target poweroff.target" >> $deskpi_lite_svc
 
-log_action_msg "DeskPi V1 Service configuration finished." 
-sudo chown root:root $safecutoffpower
-sudo chmod 644 $safecutoffpower
+log_action_msg "DeskPi Lite Safe Shutdown Service configuration finished." 
+sudo chown root:root $deskpi_lite_svc
+sudo chmod 644 $deskpi_lite_svc
 
-log_action_msg "DeskPi V1 Service Load module." 
+log_action_msg "DeskPi Lite Service Load module." 
 sudo systemctl daemon-reload
-sudo systemctl enable $daemonname-safecutoffpower.service
+sudo systemctl enable $deskpi_daemon.service
 
 # Finished 
-log_success_msg "DeskPi V1 Driver installation finished successfully." 
+log_success_msg "DeskPi Lite Driver installation finished successfully." 
 # greetings and require rebooting system to take effect.
 log_action_msg "System will reboot in 5 seconds to take effect." 
 sudo sync

@@ -1,4 +1,4 @@
-# deskpi_v1 - DeskPi Lite
+# DeskPi Lite (deskpi_v1)
 ## Description 
 The DeskPin V1 Case is a case made of ABS, and an adapter board is provided inside to transfer the HDMI interface, 3.5mm audio interface, and USB-C power interface of the Raspberry Pi to the back of the panel.
 and offer `microHDMI` to `Full-sized HDMI` interface, makes it convenient for users to use standard HDMI cables to connect external display devices. 
@@ -13,6 +13,11 @@ In addition, it provides an ultra-thin aluminum alloy heat sink and supports an 
 * Light weight heat-sink inside.
 * Adjustable speed Fan
 ## Product Links: https://deskpi.com
+
+## Principle 
+* RPi -> sending `poweroff` to `/dev/ttyUSB0` means sending `cut off power`-> MCU on board: means MCU will cut of power of Raspberry Pi. 
+
+* RPi <- Reading `poweroff` from `/dev/ttyUSB0` means `shutdown system` <- MCU on board: system will execute shutdown service or reboot (according to scripts definitions) when power button has been pressed twice.
 
 ## How to enable fan temperature control? 
 <pre> NOTE: Raspberry Pi OS (Latest) will support this function.</pre>
@@ -93,7 +98,7 @@ dtoverlay=dwc2,dr_mode=host
 ## How to send `power_off` signal to adapter board to cut off power?
 * Make sure you have already add `dtoverlay=dwc2,dr_mode=host` to `/boot/config.txt` file and `reboot` Raspberry Pi.
 * Check if there is a device called `/dev/ttyUSB0`
-* Execute the python demo script in `deskpi_v1/drivers/pyth1111on/safecutoffpower.py` 
+* Execute the python demo script in `deskpi_v1/drivers/python/safecutoffpower.py` 
 * you may need to install `pyserial` library.
 * Recommend: adding this function after `shutdown` service, so that it can safely cut off the power of Raspberry Pi.  
 
@@ -105,7 +110,7 @@ when you double click the power button, The MCU on expansion board will send thr
 ```
 pip3 install pyserial 
 ```
-2. Create a file named `double_click_safe_shutdown.py` and paste following code:
+2. Create a file named `safe_shutdown.py` and paste following code:
 ```
 import serial
 import time
@@ -128,6 +133,7 @@ while True:
 3. Execute it:
 
 ```
-python3 double_click_safe_shutdown.py
+python3 safe_shutdown.py
 ```
 You can also change the `os.system("sudo reboot")` to reboot your Raspberry Pi.
+

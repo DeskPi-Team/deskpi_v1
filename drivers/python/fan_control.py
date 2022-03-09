@@ -5,6 +5,7 @@ import time
 import subprocess
 
 GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
 GPIO.setup(14, GPIO.OUT)
 pwm = GPIO.PWM(14,100)
 
