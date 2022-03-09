@@ -42,7 +42,7 @@ echo "Before=halt.target shutdown.target poweroff.target" >> $deskpi_lite_svc
 echo "DefaultDependencies=no" >> $deskpi_lite_svc
 echo "[Service]" >> $deskpi_lite_svc
 echo "Type=oneshot" >> $deskpi_lite_svc
-echo "ExecStart=/usr/bin/python3 /usr/bin/safeshutdown.py" >> $deskpi_lite_svc
+echo "ExecStart=/usr/bin/python3 /usr/bin/safe_shutdown.py" >> $deskpi_lite_svc
 echo "RemainAfterExit=yes" >> $deskpi_lite_svc
 echo "TimeoutSec=1" >> $deskpi_lite_svc
 echo "[Install]" >> $deskpi_lite_svc
