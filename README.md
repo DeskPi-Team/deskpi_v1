@@ -127,6 +127,8 @@ while True:
         if 'poweroff' in data:
             print("System will turn off in 3 seconds")
             time.sleep(3)
+	    ser.write(b'power_off')
+	    ser.write(b'power_off')
             os.system('sudo sync && sudo init 0')
             
 ```
