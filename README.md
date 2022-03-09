@@ -14,133 +14,6 @@ In addition, it provides an ultra-thin aluminum alloy heat sink and supports an 
 * Adjustable speed Fan
 ## Product Links: https://deskpi.com
 
-## How to install it.
-
-### For Raspbian and RetroPie OS
-```
-cd ~
-git clone https://github.com/DeskPi-Team/deskpi_v1.git
-cd ~/deskpi_v1/
-chmod +x install.sh
-sudo ./install.sh
-```
-
-### For Ubuntu-mate OS
-```
-cd ~
-git clone https://github.com/DeskPi-Team/deskpi_v1.git
-cd ~/deskpi_v1/
-chmod +x install-ubuntu-mate.sh
-sudo ./install-ubuntu-mate.sh
-```
-
-### For Manjaro OS
-* Manjaro OS `can not` support control Fan speed via GPIO due to OS can not support `rpi.gpio` well.
-```
-cd ~
-git clone https://github.com/DeskPi-Team/deskpi_v1.git
-cd ~/deskpi_v1/
-chmod +x install-manjaro.sh
-sudo ./install-manjaro.sh
-```
-
-### For Kali-linux-arm OS.
-* Image Download URL: `https://images.kali.org/arm-images/kali-linux-2020.3a-rpi3-nexmon.img.xz`
-
-```
-cd ~
-git clone https://github.com/DeskPi-Team/deskpi_v1.git
-cd ~/deskpi_v1/
-chmod +x install-kali.sh
-sudo ./install-kali.sh
-```
-
-### For Twister OS v2.0.2
-* OS image: `TwisterOSv2-0-2.img`
-* Image Download URL:https://twisteros.com/twisteros.html <br>
-```
-cd ~
-git clone https://github.com/DeskPi-Team/deskpi_v1.git
-cd ~/deskpi_v1/
-chmod +x install.sh
-sudo ./install.sh
-```
-
-### For 64 bit Raspberry Pi OS (aarm64)
-* Image Download URL: http://downloads.raspberrypi.org/raspios_arm64/images/raspios_arm64-2021-05-28/
-```
-cd ~
-git clone https://github.com/DeskPi-Team/deskpi_v1.git
-cd ~/deskpi_v1/
-chmod +x install.sh
-sudo ./install.sh
-```
-
-### For DietPi OS 64bit 
-* Make sure your OS can access internet and please install `git` first.
-* Execute this command in terminal:
-```
-apt-get update && apt-get -y install git python3-pip python3-rpi.gpio
-pip3 install pyserial
-```
-* Image Download URL:  https://dietpi.com/downloads/images/DietPi_RPi-ARMv8-Buster.7z
-```
-cd ~
-git clone https://github.com/DeskPi-Team/deskpi_v1.git
-cd ~/deskpi_v1/
-./install.sh
-```
-
-### For Volumio OS Version: 2021-04-24-Pi
-<pre>NOTE: Due to OS did not support gpio control so can not control fan via PWM signal, so the fan will be at 100% speed spinning.</pre> 
-* Image Download URL: https://updates.volumio.org/pi/volumio/2.882/volumio-2.882-2021-04-24-pi.img.zip
-* Getting Start:　https://volumio.github.io/docs/User_Manual/Quick_Start_Guide.html
-* Make sure your Volumio can access internet. 
-* There are some steps need to do.
-```
-sudo nano /etc/network/interface
-```
-make sure following parameters in file `/etc/network/interface` 
-```
-auto wlan0 
-allow-hotplug wlan0 
-iface wlan0 inet dhcp
-wpa-ssid "YOUR WIFI SSID"
-wpa-psk "YOUR WIFI PASSWORD"
-```
-and enable the internet access by typing this command in terminal:
-```
-volumio internet on
-```
-and then reboot your DeskPi.
-```
-sudo reboot
-```
-* Download DeskPi driver from github:
-```
-git clone https://github.com/DeskPi-Team/deskpi_v1.git
-cd deskpi_v1/
-sudo ./install.sh
-```
-
-## How to Uninstall deskpi
-* Common Uninstall method:
-```
-sudo uninstall.sh
-```
-
-* Specify OS type and execute uninstall script.
-<pre>for example: on unbuntu mate</pre>
-
-```
-sudo uninstall-ubuntu.sh
-```
-And then select the number against to your OS Type. if your OS does `not` in the list, just select `raspberry pi os`instead. 
-
-### For Windows IoT OS
-* Unsupported due to lacking of driver.
-* Testing version: Midnight falcon
-
 ## How to enable fan temperature control? 
 <pre> NOTE: Raspberry Pi OS (Latest) will support this function.</pre>
 * Open a terminal and typing following command:
@@ -151,6 +24,62 @@ sudo raspi-config
 Navigate to `Performance Options` -> `P4 Fan` -> `Yes` -> `14` -> `60` -> `yes` -> `finish` -> reboot Raspberry Pi.
 The fan is support `PWM` signal control via `GPIO14` which is `physical pin 12`(TXD), it will spinning when the CPU temperature is above `60` degree.
 and also you can write your code to control the fan via `GPIO14`, sending `PWM` signal will trigger the fan spinning.
+
+This case hardware uses direct GPIO header connections for the included PWM capable fan. Like in your bigger DeskPi case software, you could easily change from a /dev/ttyUSB0 to a GPIO PWM fan control service.
+
+For anyone else wanting to implement some form of PWM fan control, please see the included python3 script code below. This will enable: 
+
+```
+< 40'c       - Fan 75%, for a minimum of 60sec
+40'c to 45'c - Fan 85%, for a minimum of 120sec
+> 45'c       - Fan 100%, for a minimum of 180sec
+```
+In everyday use, this script offers good temperatrue control, with the CPU temp rarely reaches > 45'c and general fan noise is very low and still keeps good control via the PWM fan vs standard Raspberry Pi OS PWM fan control via /boot/config.txt or raspi-config.
+
+```
+ #!/usr/bin/python3
+
+import RPi.GPIO as GPIO
+import time
+import subprocess
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(14, GPIO.OUT)
+pwm = GPIO.PWM(14,100)
+
+print("\nPress Ctrl+C to quit \n")
+dc = 0
+pwm.start(dc)
+
+try:
+    while True:
+        temp = subprocess.getoutput("vcgencmd measure_temp|sed 's/[^0-9.]//g'")
+        if round(float(temp)) >= 45:
+            dc = 100
+            pwm.ChangeDutyCycle(dc)
+            print("CPU Temp:",float(temp)," Fan duty cycle:",dc)
+            time.sleep(180.0)
+        if round(float(temp)) >= 40:
+            dc = 85
+            pwm.ChangeDutyCycle(dc)
+            print("CPU Temp:",float(temp)," Fan duty cycle:",dc)
+            time.sleep(120.0)
+        else:
+            dc = 70
+            pwm.ChangeDutyCycle(dc)
+            print("CPU Temp:",float(temp)," Fan duty cycle:",dc)
+            time.sleep(60.00)
+
+except KeyboardInterrupt:
+    pwm.stop()
+    GPIO.cleanup()
+    print("Ctrl + C pressed -- Ending program")
+    
+```
+Then execute it:
+```
+python3 fan_control.py
+```
 
 ## How to enable the USB2.0 in front of panel?
 * 1. Install DeskPi v1 driver.
@@ -164,6 +93,41 @@ dtoverlay=dwc2,dr_mode=host
 ## How to send `power_off` signal to adapter board to cut off power?
 * Make sure you have already add `dtoverlay=dwc2,dr_mode=host` to `/boot/config.txt` file and `reboot` Raspberry Pi.
 * Check if there is a device called `/dev/ttyUSB0`
-* Execute the python demo script in `deskpi_v1/drivers/python/safecutoffpower.py` 
+* Execute the python demo script in `deskpi_v1/drivers/pyth1111on/safecutoffpower.py` 
 * you may need to install `pyserial` library.
 * Recommend: adding this function after `shutdown` service, so that it can safely cut off the power of Raspberry Pi.  
+
+## How to reboot by double click power buttom?
+### Principle 
+when you double click the power button, The MCU on expansion board will send three times `poweroffpoweroffpoweroff` to serial port on raspberry Pi which generate via dwc2 dtoverlay, called `/dev/ttyUSB0`, and you can capture it via python script and customized your own script to control the shutdown behavior.
+* Demo code: 
+1. Install pyserial library to control serial port. 
+```
+pip3 install pyserial 
+```
+2. Create a file named `double_click_safe_shutdown.py` and paste following code:
+```
+import serial
+import time
+import os
+
+
+ser = serial.Serial('/dev/ttyUSB0', baudrate=9600, timeout=3)
+
+while True:
+    if ser.isOpen():
+        data = ser.read(16)
+        data = data.decode('utf-8')
+        #print(data)
+        if 'poweroff' in data:
+            print("System will turn off in 3 seconds")
+            time.sleep(3)
+            os.system('sudo sync && sudo init 0')
+            
+```
+3. Execute it:
+
+```
+python3 double_click_safe_shutdown.py
+```
+You can also change the `os.system("sudo reboot")` to reboot your Raspberry Pi.
