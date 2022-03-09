@@ -44,6 +44,7 @@ echo "[Service]" >> $deskpi_lite_svc
 echo "Type=simple" >> $deskpi_lite_svc
 echo "ExecStart=sudo /usr/bin/python3 /usr/bin/safe_shutdown.py &" >> $deskpi_lite_svc
 echo "RemainAfterExit=yes" >> $deskpi_lite_svc
+echo "Restart=always" >> $deskpi_lite_svc
 echo "[Install]" >> $deskpi_lite_svc
 echo "WantedBy=multi-user.target" >> $deskpi_lite_svc
 
