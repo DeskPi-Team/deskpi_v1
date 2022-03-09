@@ -5,7 +5,7 @@
 daemonname="deskpilite.service"
 filelocation=/lib/systemd/system/$daemonname
 
-log_action_msg "Uninstalling DeskPi V1 Driver..."
+log_action_msg "Uninstalling DeskPi Lite Driver..."
 sleep 1
 log_action_msg "Remove dtoverlay configure from /boot/config.txt file"
 sudo sed -i '/dtoverlay=dwc2,dr_mode=host/d' /boot/config.txt

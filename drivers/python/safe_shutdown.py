@@ -21,8 +21,9 @@ while True:
                 for i in range(1, 4):
                     print(i)
                     time.sleep(1)
+                ser.write(b'power_off')
+                ser.write(b'power_off')
                 os.system("sudo sync && sudo init 0")
     except KeyboardInterrupt:
         ser.close()
         break
-        print("---End program---")
