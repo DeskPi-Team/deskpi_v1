@@ -6,7 +6,7 @@ sudo apt-get update && sudo apt-get -y install git
 TEMP=/tmp
 
 cd $TEMP/ && git clone https://github.com/DeskPi-Team/deskpi_v1 
-if [[ !$ -neq 0 ]]; then
+if [[ !$ -ne 0 ]]; then
 	echo "Error: Can not download deskpi_v1 repository, please try again!"
 fi
 
@@ -30,9 +30,9 @@ fi
 log_action_msg "DeskPi lite safe shutdown service"
 
 # copy python script to /usr/bin/
-cp -f /tmp/deskpi_v1/drivers/python/safe_shutdown.py /usr/bin/
-cp -f /tmp/deskpi_v1/drivers/python/fan_control.py /usr/bin/
-cp -f /tmp/deskpi_v1/drivers/python/safecutoffpower.py /usr/bin/
+cp -f $TEMP/deskpi_v1/drivers/python/safe_shutdown.py /usr/bin/
+cp -f $TEMP/deskpi_v1/drivers/python/fan_control.py /usr/bin/
+cp -f $TEMP/deskpi_v1/drivers/python/safecutoffpower.py /usr/bin/
 
 # send signal to MCU before system shuting down.
 echo "[Unit]" > $deskpi_lite_svc
