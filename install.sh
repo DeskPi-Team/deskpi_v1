@@ -1,14 +1,14 @@
 #!/bin/bash
 # 
 . /lib/lsb/init-functions
-# sudo apt-get update && sudo apt-get -y install git 
+sudo apt-get update && sudo apt-get -y install git 
 
 TEMP=/tmp
 
-# cd $TEMP/ && git clone https://github.com/DeskPi-Team/deskpi_v1 
-# if [[ $? -ne 0 ]]; then
-#	echo "Error: Can not download deskpi_v1 repository, please try again!"
-# fi
+cd $TEMP/ && git clone https://github.com/DeskPi-Team/deskpi_v1 
+if [[ $? -ne 0 ]]; then
+	echo "Error: Can not download deskpi_v1 repository, please try again!"
+fi
 
 deskpi_daemon=deskpilite
 deskpi_lite_svc=/lib/systemd/system/$deskpi_daemon.service
