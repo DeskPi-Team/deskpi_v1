@@ -40,11 +40,19 @@ echo "Description=DeskPi Lite Service" >> $deskpi_lite_svc
 echo "Conflicts=reboot.target" >> $deskpi_lite_svc
 echo "Before=halt.target shutdown.target poweroff.target" >> $deskpi_lite_svc
 echo "DefaultDependencies=no" >> $deskpi_lite_svc
+echo "StartLimitIntervalSec=60" >> $deskpi_lite_svc
+echo "StartLimitBurst=5" >> $deskpi_lite_svc
+
+
 echo "[Service]" >> $deskpi_lite_svc
+echo "RootDirectory=/" >> $deskpi_lite_svc
+echo "User=root" >> $deskpi_lite_svc
 echo "Type=simple" >> $deskpi_lite_svc
 echo "ExecStart=sudo /usr/bin/python3 /usr/bin/safe_shutdown.py &" >> $deskpi_lite_svc
 echo "RemainAfterExit=yes" >> $deskpi_lite_svc
-echo "Restart=always" >> $deskpi_lite_svc
+echo "Restart=on-failure" >> $deskpi_lite_svc
+echo "RestartSec=30" >> $deskpi_lite_svc
+
 echo "[Install]" >> $deskpi_lite_svc
 echo "WantedBy=multi-user.target" >> $deskpi_lite_svc
 
