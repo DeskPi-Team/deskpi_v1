@@ -63,7 +63,7 @@ sudo chmod 644 $deskpi_lite_svc
 log_action_msg "DeskPi Lite Service Load module." 
 sudo systemctl daemon-reload
 sudo systemctl enable $deskpi_daemon.service
-sudo systemctl restartt $deskpi_daemon.service
+sudo systemctl restart $deskpi_daemon.service
 
 # Finished 
 log_success_msg "DeskPi Lite Driver installation finished successfully." 
