@@ -1,6 +1,9 @@
 #!/bin/bash
 # 
 . /lib/lsb/init-functions
+
+if [ "$(id -u)" -ne 0 ]; then echo "Please run as root." >&2; exit 1; fi
+
 sudo apt-get update && sudo apt-get -y install git 
 
 TEMP=/tmp
