@@ -20,8 +20,14 @@ fi
 
 # adding dtoverlay to enable dwc2 on host mode.
 log_action_msg "Enable dwc2 on Host Mode"
-sudo sed -i '/dtoverlay=dwc2*/d' /boot/config.txt 
-sudo sed -i '$a\dtoverlay=dwc2,dr_mode=host' /boot/config.txt 
+if [ -e /boot/firmware/config.txt ] ; then
+   FIRMWARE=/firmware
+else
+   FIRMWARE=
+fi
+CONFIG=/boot${FIRMWARE}/config.txt
+sudo sed -i '/dtoverlay=dwc2*/d' $CONFIG
+sudo sed -i '$a\dtoverlay=dwc2,dr_mode=host' $CONFIG
 if [ $? -eq 0 ]; then
    log_action_msg "dwc2 has been setting up successfully"
 fi
