@@ -14,6 +14,10 @@ In addition, it provides an ultra-thin aluminum alloy heat sink and supports an 
 * Adjustable speed Fan
 ## Product Links: https://deskpi.com
 
+<pre> NOTE:
+2025-08-18： Please do not upgrade Raspberry Pi OS to 2025-05-13 release Due to the CH341 driver's issue, it not compatible with the latest Raspberry Pi OS right now. (2025-05-13 release) We are trying to fix the issue ASAP. Please use the old Raspberry Pi OS instead.  
+</pre>
+
 ## Principle 
 * RPi -> sending `poweroff` to `/dev/ttyUSB0` means sending `cut off power`-> MCU on board: means MCU will cut of power of Raspberry Pi. 
 
